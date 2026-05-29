@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+.light,
+:root {
+  --background: #fafafa;
+  --foreground: #09090b;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --card: rgba(0, 0, 0, 0.03);
+  --card-border: rgba(0, 0, 0, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --bg-gradient-1: hsla(253, 16%, 95%, 1);
+  --bg-gradient-2: hsla(225, 39%, 80%, 0.2);
+  --bg-gradient-3: hsla(339, 49%, 80%, 0.2);
+  color-scheme: light;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --card: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --bg-gradient-1: hsla(253, 16%, 7%, 1);
+  --bg-gradient-2: hsla(225, 39%, 30%, 0.2);
+  --bg-gradient-3: hsla(339, 49%, 30%, 0.2);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    radial-gradient(at 0% 0%, var(--bg-gradient-1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, var(--bg-gradient-2) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, var(--bg-gradient-3) 0, transparent 50%);
+  background-attachment: fixed;
+}
+
+@layer utilities {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.08);
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .light .glass {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(15, 23, 42, 0.12);
+    box-shadow: 0 28px 70px rgba(15, 23, 42, 0.1);
+  }
+
+  .light .text-primary,
+  .light .text-primary:hover,
+  .light .text-primary:focus {
+    color: var(--primary) !important;
+  }
+
+  .dark .glass {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+  }
+
+  .light .glass {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(15, 23, 42, 0.12);
+    box-shadow: 0 28px 70px rgba(15, 23, 42, 0.1);
+  }
+
+  .light .auth-page,
+  .light .auth-page label,
+  .light .auth-page p,
+  .light .auth-page span:not(.text-primary),
+  .light .auth-page a:not(.text-primary),
+  .light .auth-page strong:not(.text-primary),
+  .light .auth-page em:not(.text-primary),
+  .light .auth-page small:not(.text-primary),
+  .light .auth-page input,
+  .light .auth-page textarea,
+  .light .auth-page select,
+  .light .auth-page button {
+    color: #000 !important;
+  }
+
+  .light .auth-page input::placeholder,
+  .light .auth-page textarea::placeholder {
+    color: rgba(0, 0, 0, 0.55) !important;
+  }
+
+  .light .text-white {
+    color: #000 !important;
+  }
+
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #a78bfa, #ec4899);
+  }
+}
