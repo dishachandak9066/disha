@@ -228,7 +228,11 @@ export async function getBookWithChapters(bookId: number) {
 
     const book = (books as any[])[0];
 
-    book.subjects = JSON.parse(book.subjects || '[]');
+    try {
+  book.subjects = JSON.parse(book.subjects || '[]');
+} catch {
+  book.subjects = [book.subjects];
+}
 
     const [chapters] = await connection.execute(
       `SELECT

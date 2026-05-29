@@ -1,60 +1,87 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBookWithChapters, getChapters } from '@/services/databaseService';
+import {
+  getBookWithChapters,
+  getChapters,
+} from '@/services/databaseService';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
+
     const bookId = parseInt(id);
 
     if (isNaN(bookId)) {
-      return NextResponse.json({ error: 'Invalid book ID' }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Invalid book ID',
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
-    // Check if requesting specific chapters
-    const searchParams = req.nextUrl.searchParams;
-    const startChapter = searchParams.get('startChapter');
-    const endChapter = searchParams.get('endChapter');
+    const searchParams =
+      req.nextUrl.searchParams;
 
+    const startChapter =
+      searchParams.get('startChapter');
+
+    const endChapter =
+      searchParams.get('endChapter');
+
+    // Specific chapter range
     if (startChapter && endChapter) {
-      // Get specific chapter range
       const chapters = await getChapters(
         bookId,
         parseInt(startChapter),
         parseInt(endChapter)
       );
 
-      if (!chapters || chapters.length === 0) {
-        return NextResponse.json(
-          { error: 'Chapters not found' },
-          { status: 404 }
-        );
-      }
-
       return NextResponse.json({
         success: true,
-        data: chapters,
+        chapters,
       });
     }
 
-    // Get full book with all chapters
-    const book = await getBookWithChapters(bookId);
+    // Full book
+    const book =
+      await getBookWithChapters(bookId);
 
     if (!book) {
-      return NextResponse.json({ error: 'Book not found' }, { status: 404 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Book not found',
+        },
+        {
+          status: 404,
+        }
+      );
     }
 
     return NextResponse.json({
       success: true,
-      data: book,
+      book,
     });
+
   } catch (error: any) {
-    console.error('Error fetching book:', error);
+    console.error(error);
+
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch book' },
-      { status: 500 }
+      {
+        success: false,
+        error:
+          error.message ||
+          'Failed to fetch book',
+      },
+      {
+        status: 500,
+      }
     );
   }
 }

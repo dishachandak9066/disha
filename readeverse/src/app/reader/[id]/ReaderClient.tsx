@@ -17,59 +17,57 @@ export default function ReaderClient({
 }) {
   const [content, setContent] = useState('Loading book...')
 
-  useEffect(() => {
+ useEffect(() => {
   async function loadBook() {
     try {
       const response = await fetch(
-        `/api/books/${book.id}/content`
+        `/api/books/${book.id}`
       )
 
       const data = await response.json()
 
-console.log(data)
-
-if (!response.ok) {
-  throw new Error(
-    data.error || 'Failed to fetch'
-  )
-}
-
       console.log(data)
 
-      // Chapters from DB
+      if (!response.ok) {
+        throw new Error(
+          data.error || 'Failed to fetch'
+        )
+      }
+
+      // Chapters exist
       if (
         data.book?.chapters &&
         data.book.chapters.length > 0
       ) {
-        const fullContent = data.book.chapters
-          .map((chapter: any) => chapter.content)
-          .join('\n\n')
+        const fullContent =
+          data.book.chapters
+            .map(
+              (chapter: any) =>
+                chapter.content
+            )
+            .join('\n\n')
 
         setContent(fullContent)
 
         return
       }
 
-      // Raw Gutenberg text fallback
-      if (data.book?.rawText) {
-        setContent(data.book.rawText)
+      setContent(
+        'No chapters available.'
+      )
 
-        return
-      }
-
-      setContent('No content available.')
     } catch (error: any) {
-  console.error(error)
+      console.error(error)
 
-  setContent(
-    error.message || 'Failed to load content.'
-  )
-}
+      setContent(
+        error.message ||
+          'Failed to load content.'
+      )
+    }
   }
 
   loadBook()
 }, [book.id])
-
   return (
     <div className="max-w-4xl mx-auto p-8 text-white">
       <h1 className="text-4xl font-bold mb-2">
