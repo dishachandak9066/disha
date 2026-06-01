@@ -14,11 +14,11 @@ function getUserIdFromRequest(req: NextRequest): string {
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { bookId: string } }
+  { params }: { params: Promise<{ bookId: string }> }
 ) {
   try {
     const userId = getUserIdFromRequest(req);
-    const { bookId } = params;
+    const { bookId } = await params;
     const { progress, currentChapter } = await req.json();
 
     if (typeof progress !== 'number' || typeof currentChapter !== 'number') {
