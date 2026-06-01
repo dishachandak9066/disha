@@ -6,18 +6,10 @@ import {
 
 export async function GET(
   req: NextRequest,
-<<<<<<< HEAD
-  context: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await context.params;
-
-=======
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
->>>>>>> 4cfe8dc35fe86aa5e1041d7d8813be16785316fd
     const bookId = parseInt(id);
 
     if (isNaN(bookId)) {
@@ -32,8 +24,7 @@ export async function GET(
       );
     }
 
-    const searchParams =
-      req.nextUrl.searchParams;
+    const searchParams = req.nextUrl.searchParams;
 
     const startChapter =
       searchParams.get('startChapter');
@@ -56,8 +47,7 @@ export async function GET(
     }
 
     // Full book
-    const book =
-      await getBookWithChapters(bookId);
+    const book = await getBookWithChapters(bookId);
 
     if (!book) {
       return NextResponse.json(
@@ -75,7 +65,6 @@ export async function GET(
       success: true,
       book,
     });
-
   } catch (error: any) {
     console.error(error);
 
