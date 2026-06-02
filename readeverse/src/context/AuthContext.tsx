@@ -1,4 +1,5 @@
 'use client';
+import { useSession } from "next-auth/react";
 
 import React, {
   createContext,
@@ -40,26 +41,42 @@ export function AuthProvider({
 }: {
   children: ReactNode;
 }) {
+  const { data: session, status } = useSession();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Load stored user
   useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        const storedUser = localStorage.getItem('readeverse_user');
+  try {
+    // Existing email/password login
+    const storedUser = localStorage.getItem('readeverse_user');
 
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load user:', error);
-      localStorage.removeItem('readeverse_user');
-    } finally {
-      setIsLoading(false);
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      return;
     }
-  }, []);
+
+    // Google login via NextAuth
+    if (session?.user) {
+      const googleUser = {
+        id: session.user.email || '',
+        name: session.user.name || '',
+        email: session.user.email || '',
+      };
+
+      setUser(googleUser);
+
+      localStorage.setItem(
+        'readeverse_user',
+        JSON.stringify(googleUser)
+      );
+    }
+  } catch (error) {
+    console.error('Failed to load user:', error);
+  } finally {
+    setIsLoading(false);
+  }
+}, [session]);
 
   // Save auth data
   const saveAuthData = (data: AuthResponse) => {

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import Provider from "@/providers/sessionprovider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,12 +50,14 @@ export default async function RootLayout({
       }`}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider initialTheme={initialTheme}>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </ThemeProvider>
-      </body>
+  <ThemeProvider initialTheme={initialTheme}>
+    <Provider>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </Provider>
+  </ThemeProvider>
+</body>
     </html>
   );
 }
