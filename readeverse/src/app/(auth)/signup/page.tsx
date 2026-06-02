@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { Mail, Lock, User, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default function SignupPage() {
   const [name, setName] = useState('');
@@ -170,6 +172,7 @@ export default function SignupPage() {
     onClick={() =>
       signIn("google", {
         callbackUrl: "/dashboard",
+        prompt: "select_account",
       })
     }
     className="flex items-center justify-center gap-2 py-2.5 px-6 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 border-2 border-black dark:border-white/10 rounded-xl transition-colors text-black dark:text-white font-medium"

@@ -9,7 +9,7 @@ import LanguageSwitcher from '@/components/dashboard/LanguageSwitcher';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <ProtectedRoute>
-      <TranslationProvider>
+      <TranslationProvider>   
         <AudioPlayerProvider>
           <div className="min-h-screen bg-background text-foreground flex">
             {/* Desktop Sidebar */}

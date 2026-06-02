@@ -1,5 +1,6 @@
 'use client';
 import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 import React, {
   createContext,
@@ -47,36 +48,46 @@ export function AuthProvider({
 
   // Load stored user
   useEffect(() => {
+  if (status === "loading") {
+    return;
+  }
+
   try {
-    // Existing email/password login
-    const storedUser = localStorage.getItem('readeverse_user');
-
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      return;
-    }
-
-    // Google login via NextAuth
+    // Google Login
     if (session?.user) {
       const googleUser = {
-        id: session.user.email || '',
-        name: session.user.name || '',
-        email: session.user.email || '',
+        id: session.user.email || "",
+        name: session.user.name || "",
+        email: session.user.email || "",
       };
 
       setUser(googleUser);
 
       localStorage.setItem(
-        'readeverse_user',
+        "readeverse_user",
         JSON.stringify(googleUser)
       );
+
+      document.cookie = `readeverse_user=${encodeURIComponent(
+        JSON.stringify(googleUser)
+      )}; path=/; max-age=2592000; samesite=lax`;
+
+      setIsLoading(false);
+      return;
+    }
+
+    // Normal Login
+    const storedUser = localStorage.getItem("readeverse_user");
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
   } catch (error) {
-    console.error('Failed to load user:', error);
+    console.error("Failed to load user:", error);
   } finally {
     setIsLoading(false);
   }
-}, [session]);
+}, [session, status]);
 
   // Save auth data
   const saveAuthData = (data: AuthResponse) => {
@@ -198,7 +209,8 @@ export function AuthProvider({
   };
 
   // Logout
-  const logout = () => {
+    // Logout
+  const logout = async () => {
     setUser(null);
 
     localStorage.removeItem('readeverse_user');
@@ -206,6 +218,10 @@ export function AuthProvider({
 
     document.cookie =
       'readeverse_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+
+    await signOut({
+      callbackUrl: '/login',
+    });
   };
 
   return (
