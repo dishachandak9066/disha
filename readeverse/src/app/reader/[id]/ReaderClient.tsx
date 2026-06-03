@@ -25,6 +25,7 @@ export default function ReaderClient({
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [currentChapter, setCurrentChapter] = useState(0)
+  const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
     async function loadBook() {
@@ -96,6 +97,27 @@ export default function ReaderClient({
     return chunks
   }
 
+  const saveProgress = async (
+  progress: number,
+  chapter: number
+) => {
+  try {
+    await fetch('/api/reading-progress', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        bookId: book.id,
+        progress,
+        currentChapter: chapter,
+      }),
+    });
+  } catch (error) {
+    console.error('Progress save failed', error);
+  }
+};
+
   const speakChapter = (
     chapterIndex: number
   ) => {
@@ -121,6 +143,15 @@ export default function ReaderClient({
       if (
         chunkIndex >= chunks.length
       ) {
+        const progress =
+  ((chapterIndex + 1) / chapters.length) * 100;
+        setProgress(progress)
+        
+        saveProgress(
+  progress,
+  chapterIndex + 1
+);
+
         const nextChapter =
           chapterIndex + 1
 
@@ -183,17 +214,19 @@ export default function ReaderClient({
   }
 
   const playAudio = () => {
-    if (
-      chapters.length === 0
-    )
-      return
+  console.log('PLAY CLICKED');
 
-    speechSynthesis.cancel()
+  if (chapters.length === 0)
+    return;
 
-    setCurrentChapter(0)
+  saveProgress(1, 1);
 
-    speakChapter(0)
-  }
+  speechSynthesis.cancel();
+
+  setCurrentChapter(0);
+
+  speakChapter(0);
+}
 
   const pauseAudio = () => {
     speechSynthesis.pause()

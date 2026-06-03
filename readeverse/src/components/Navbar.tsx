@@ -44,7 +44,6 @@ export default function Navbar() {
         
         <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8 text-sm font-medium text-gray-600">
           <Link href="#features" className="hover:text-primary transition-colors">Features</Link>
-          <Link href="/dashboard/audiobooks" onClick={handleAudiobooksClick} className="hover:text-primary transition-colors">Audiobooks</Link>
           <Link href="/dashboard/library" onClick={handleLibraryClick} className="hover:text-primary transition-colors">My Library</Link>
         </div>
         

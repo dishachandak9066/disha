@@ -8,7 +8,6 @@ import {
   LayoutTemplate,
   LineChart,
 } from 'lucide-react';
-
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -75,59 +74,122 @@ export default function FeaturesSection() {
   };
 
   return (
-    <section id="features" className="pt-20 pb-12 px-6 relative">
-      <div className="max-w-7xl mx-auto">
+    <section
+      id="features"
+      className="relative overflow-hidden py-24 px-6"
+    >
+      {/* Background Glows */}
+      <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-primary/15 dark:bg-primary/10 blur-3xl pointer-events-none -z-10" />
 
+      <div className="absolute bottom-20 right-10 w-72 h-72 rounded-full bg-blue-500/15 dark:bg-blue-500/10 blur-3xl pointer-events-none -z-10" />
+
+      <div className="max-w-7xl mx-auto">
         {/* Heading */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Supercharge Your{' '}
-            <span className="text-gradient">
-              Reading
+        <div className="text-center mb-10">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
+            Supercharge{' '}
+            <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-500 bg-clip-text text-transparent">
+              Your Reading
             </span>
           </h2>
 
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Everything you need to read more, learn faster,
-            and enjoy every page.
+          <p className="max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
+            Everything you need to read smarter, learn faster, and enjoy every
+            page with an AI-powered reading experience.
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Features */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{
                 duration: 0.5,
-                delay: index * 0.1,
+                delay: index * 0.08,
               }}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -8 }}
               onClick={() => handleFeatureClick(feature)}
-              className={`glass p-8 rounded-3xl group relative overflow-hidden transition-all duration-300 ${
-                feature.requiresAuth ? 'cursor-pointer' : ''
-              }`}
+              className={`
+                relative
+                h-full
+                overflow-hidden
+                rounded-3xl
+                border
+                border-slate-200
+                dark:border-white/10
+                bg-white
+                dark:bg-white/[0.03]
+                backdrop-blur-xl
+                p-8
+                transition-all
+                duration-500
+                hover:border-primary/40
+                dark:hover:border-primary/30
+                hover:shadow-[0_15px_40px_rgba(0,0,0,0.08)]
+                dark:hover:shadow-2xl
+                group
+                ${
+                  feature.requiresAuth
+                    ? 'cursor-pointer'
+                    : ''
+                }
+              `}
             >
+              {/* Hover Glow */}
               <div
-                className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br ${feature.color}`}
+                className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-all duration-500`}
               />
 
-              <div
-                className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 shadow-lg text-white`}
-              >
-                {feature.icon}
+              {/* Top Accent */}
+              <div className="absolute top-0 left-1/2 h-px w-24 -translate-x-1/2 bg-gradient-to-r from-transparent via-slate-300 dark:via-white/40 to-transparent" />
+
+              <div className="relative z-10 flex h-full flex-col">
+                {/* Icon */}
+                <div
+                  className={`
+                    mb-6
+                    flex h-16 w-16 items-center justify-center
+                    rounded-2xl
+                    bg-gradient-to-br
+                    ${feature.color}
+                    text-white
+                    shadow-lg
+                    transition-transform
+                    duration-300
+                    group-hover:scale-110
+                  `}
+                >
+                  {feature.icon}
+                </div>
+
+                {/* Title */}
+                <h3 className="mb-3 text-xl font-semibold tracking-tight">
+                  {feature.title}
+                </h3>
+
+                {/* Description */}
+                <p className="flex-grow text-muted-foreground leading-7">
+                  {feature.description}
+                </p>
+
+                {/* CTA */}
+                <div
+                  className="
+                    mt-6
+                    translate-x-[-10px]
+                    opacity-0
+                    transition-all
+                    duration-300
+                    group-hover:translate-x-0
+                    group-hover:opacity-100
+                  "
+                >
+                </div>
               </div>
-
-              <h3 className="text-xl font-bold mb-3">
-                {feature.title}
-              </h3>
-
-              <p className="text-gray-400 leading-relaxed">
-                {feature.description}
-              </p>
             </motion.div>
           ))}
         </div>

@@ -7,54 +7,59 @@ import {
   Heart,
   BookOpen,
 } from 'lucide-react';
+import { DashboardStats } from '@/services/dashboardService';
 
-export default function StatsCards() {
+export default function StatsCards({
+  stats,
+}: {
+  stats: DashboardStats;
+}) {
 
   // Default values = 0
-  const items = [
-    {
-      label: 'Books Finished',
-      value: 0,
-      icon: Book,
-      color: 'text-blue-600',
-      bg: 'bg-blue-400/10',
-    },
-    {
-      label: 'Reading Hours',
-      value: 0,
-      icon: Clock,
-      color: 'text-purple-600',
-      bg: 'bg-purple-400/10',
-    },
-    {
-      label: 'Currently Reading',
-      value: 0,
-      icon: BookOpen,
-      color: 'text-emerald-600',
-      bg: 'bg-emerald-400/10',
-    },
-    {
-      label: 'Favorite Books',
-      value: 0,
-      icon: Heart,
-      color: 'text-pink-600',
-      bg: 'bg-pink-400/10',
-    },
-    {
-      label: 'Audiobook Hours',
-      value: 0,
-      icon: Headphones,
-      color: 'text-amber-600',
-      bg: 'bg-amber-400/10',
-    },
-    {
-      label: 'Reading Streak',
-      value: '0 Days',
-      icon: Flame,
-      color: 'text-orange-600',
-      bg: 'bg-orange-400/10',
-    },
-  ];
+ const items = [
+  {
+    label: 'Books Finished',
+    value: stats.booksFinished,
+    icon: Book,
+    color: 'text-blue-600',
+    bg: 'bg-blue-400/10',
+  },
+  {
+    label: 'Reading Hours',
+    value: stats.readingHours,
+    icon: Clock,
+    color: 'text-purple-600',
+    bg: 'bg-purple-400/10',
+  },
+  {
+    label: 'Currently Reading',
+    value: stats.currentlyReading,
+    icon: BookOpen,
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-400/10',
+  },
+  {
+    label: 'Favorite Books',
+    value: stats.favoriteBooks,
+    icon: Heart,
+    color: 'text-pink-600',
+    bg: 'bg-pink-400/10',
+  },
+  {
+    label: 'Audiobook Hours',
+    value: stats.audiobookHours,
+    icon: Headphones,
+    color: 'text-amber-600',
+    bg: 'bg-amber-400/10',
+  },
+  {
+    label: 'Reading Streak',
+    value: `${stats.readingStreak} Days`,
+    icon: Flame,
+    color: 'text-orange-600',
+    bg: 'bg-orange-400/10',
+  },
+];
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">

@@ -38,7 +38,7 @@ export default function HeroSection() {
           <Sparkles className="w-4 h-4 text-primary" />
 
           <span>
-            The next generation of reading is here
+            The next generation of reading
           </span>
         </motion.div>
 
@@ -49,11 +49,11 @@ export default function HeroSection() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-5xl md:text-7xl font-extrabold tracking-tight mb-5 leading-tight"
         >
-          Unlock the Universe of
+          Unlock the Universe 
           <br className="hidden md:block" />
 
           <span className="text-gradient">
-            Knowledge
+           of Knowledge
           </span>
         </motion.h1>
 
@@ -62,10 +62,10 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 leading-relaxed"
+          className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto mb-8 leading-relaxed"
         >
           Experience a limitless library powered by AI.
-          Get personalized recommendations, smart summaries,
+          Get personalized recommendations, seamless cross-device syncing,
           and immersive audiobooks in a premium reading environment.
         </motion.p>
 

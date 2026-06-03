@@ -23,7 +23,7 @@ import { useTranslation } from '@/context/TranslationContext';
 const mainLinks = [
   { key: 'home', href: '/dashboard', icon: Home },
   { key: 'my_library', href: '/dashboard/library', icon: Library },
-  { key: 'audiobooks', href: '/dashboard/audiobooks', icon: Headphones },
+  
 ];
 
 const discoverLinks = [

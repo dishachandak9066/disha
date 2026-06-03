@@ -473,18 +473,37 @@ export async function updateReadingProgress(
   progress: number,
   currentChapter: number
 ) {
+  console.log('Updating progress:', {
+    userId,
+    bookId,
+    progress,
+    currentChapter,
+  });
+
   const connection = await pool.getConnection();
 
   try {
-    await connection.execute(
-      `UPDATE user_library
-       SET
-         progress = ?,
-         currentChapter = ?,
-         lastReadAt = CURRENT_TIMESTAMP
-       WHERE userId = ? AND bookId = ?`,
-      [progress, currentChapter, userId, bookId]
+    console.log('Saving to database:', {
+  userId,
+  bookId,
+  progress,
+  currentChapter,
+});
+    const [result] = await connection.execute(
+      `
+      INSERT INTO user_library
+        (userId, bookId, progress, currentChapter, lastReadAt)
+      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+      ON DUPLICATE KEY UPDATE
+        progress = VALUES(progress),
+        currentChapter = VALUES(currentChapter),
+        lastReadAt = CURRENT_TIMESTAMP
+      `,
+      [userId, bookId, progress, currentChapter]
     );
+
+    console.log('DB result:', result);
+    
   } finally {
     connection.release();
   }
@@ -496,3 +515,41 @@ export { pool };
 initializeDatabase().catch((err) => {
   console.error('Database initialization failed:', err);
 });
+
+export async function getDashboardStats(userId: string) {
+  const connection = await pool.getConnection();
+
+  try {
+    const [finished]: any = await connection.execute(
+      `
+      SELECT COUNT(*) as count
+      FROM user_library
+      WHERE userId = ?
+      AND progress >= 100
+      `,
+      [userId]
+    );
+
+    const [reading]: any = await connection.execute(
+      `
+      SELECT COUNT(*) as count
+      FROM user_library
+      WHERE userId = ?
+      AND progress > 0
+      AND progress < 100
+      `,
+      [userId]
+    );
+
+    return {
+      booksFinished: finished[0].count,
+      currentlyReading: reading[0].count,
+      favoriteBooks: 0,
+      readingHours: 0,
+      audiobookHours: 0,
+      readingStreak: 0,
+    };
+  } finally {
+    connection.release();
+  }
+}

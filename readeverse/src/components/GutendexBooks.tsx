@@ -120,7 +120,7 @@ export default function GutendexBooks() {
           
           {/* Title and Seed Button */}
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Library Books</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white">Library Books</h2>
             <button
               onClick={handleSeedBooks}
               disabled={seeding}
